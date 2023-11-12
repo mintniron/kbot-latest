@@ -37,34 +37,73 @@ to quickly create a Cobra application.`,
 			Poller: &telebot.LongPoller{Timeout: 10 * time.Second},
 		})
 
-		menu := &telebot.ReplyMarkup{
-			ReplyKeyboard: [][]telebot.ReplyButton{
-				{{Text: "/hello"}, {Text: "/help"}},
-			},
-		}
 		if err != nil {
 			log.Fatalf("Please check TELE_TOKEN env variable. %s", err)
 			return
 		}
 
-		kbot.Handle(telebot.OnText, func(m telebot.Context) error {
-			log.Print(m.Message().Payload, m.Text())
-			payload := m.Message().Payload
-
-			switch payload {
-			case "hello":
-				err = m.Send(fmt.Sprintf("Hello I'm Kbot %s!", appVersion))
-			case "help":
-				err = m.Send("Welcome to Kbot!", menu)
-				err = m.Send("This is the help message. Here you can find out the current time in the locations of your partners and team members: Kyiv, Bostock, Vienna, Tbilisi or Vancouver")
-				return err
+		kbot.Handle("/start", func(m telebot.Context) error {
+			menu := &telebot.ReplyMarkup{
+				ReplyKeyboard: [][]telebot.ReplyButton{
+					{{Text: "Hello"}, {Text: "Help"}},
+					{{Text: "Kyiv"}, {Text: "Boston"}, {Text: "London"}},
+					{{Text: "Vienna"}, {Text: "Tbilisi"}, {Text: "Vancouver"}},
+				},
 			}
+			return m.Send("Welcome to Kbot!", menu)
+		})
 
-			return err
+		kbot.Handle(telebot.OnText, func(m telebot.Context) error {
+			switch m.Text() {
+			case "Hello":
+				return m.Send(fmt.Sprintf("Hi! I'm Kbot %s! And I know what time it is!", appVersion))
+			case "Help":
+				return m.Send("This is the help message. Here you can find out the current time in the locations of your partners and team members: Kyiv, Boston, London, Vienna, Tbilisi or Vancouver")
+			case "Kyiv":
+				return m.Send("Current time in Kyiv: " + getTime("Kyiv"))
+			case "Boston":
+				return m.Send("Current time in Boston: " + getTime("Boston"))
+			case "London":
+				return m.Send("Current time in London: " + getTime("London"))
+			case "Vienna":
+				return m.Send("Current time in Vienna: " + getTime("Vienna"))
+			case "Tbilisi":
+				return m.Send("Current time in Tbilisi: " + getTime("Tbilisi"))
+			case "Vancouver":
+				return m.Send("Current time in Vancouver: " + getTime("Vancouver"))
+			default:
+				return m.Send("Unknown command. Please try again.")
+			}
 		})
 
 		kbot.Start()
 	},
+}
+
+func getTime(location string) string {
+	var locName string
+	switch location {
+	case "Kyiv":
+		locName = "Europe/Kiev"
+	case "Boston":
+		locName = "America/New_York"
+	case "London":
+		locName = "Europe/London"
+	case "Vienna":
+		locName = "Europe/Vienna"
+	case "Tbilisi":
+		locName = "Asia/Tbilisi"
+	case "Vancouver":
+		locName = "America/Vancouver"
+	default:
+		return "Invalid location"
+	}
+
+	loc, err := time.LoadLocation(locName)
+	if err != nil {
+		return "Invalid location"
+	}
+	return time.Now().In(loc).Format("15:04:05")
 }
 
 func init() {

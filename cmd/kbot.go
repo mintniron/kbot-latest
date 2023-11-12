@@ -37,6 +37,11 @@ to quickly create a Cobra application.`,
 			Poller: &telebot.LongPoller{Timeout: 10 * time.Second},
 		})
 
+		menu := &telebot.ReplyMarkup{
+			ReplyKeyboard: [][]telebot.ReplyButton{
+				{{Text: "/hello"}, {Text: "/help"}},
+			},
+		}
 		if err != nil {
 			log.Fatalf("Please check TELE_TOKEN env variable. %s", err)
 			return
@@ -49,8 +54,12 @@ to quickly create a Cobra application.`,
 			switch payload {
 			case "hello":
 				err = m.Send(fmt.Sprintf("Hello I'm Kbot %s!", appVersion))
+			case "help":
+				err = m.Send("Welcome to Kbot!", menu)
+				err = m.Send("This is the help message. Here you can find out the current time in the locations of your partners and team members: Kyiv, Bostock, Vienna, Tbilisi or Vancouver")
+				return err
 			}
-			
+
 			return err
 		})
 

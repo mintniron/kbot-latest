@@ -34,3 +34,4 @@ dive: image
 
 clean:
 	rm -rf kbot
+	

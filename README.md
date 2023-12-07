@@ -2,18 +2,30 @@
 
 1. Створіть новий Helm чарт за допомогою команди (приклад розглядається на Coding Session):
 
-helm create <CHART_NAME>
+```sh
+$ helm create helm
+Creating helm
+```
+
 2. Підготуйте файл "values.yaml" у директорії чарту, включивши до нього блок:
 
+```yaml
 image:
-  repository: <REPO>
-  tag: <TAG>
+  repository: umanetsvitaliy
+  tag: "v1.2.0-660ae95"
   arch: amd64
+# Додатково визначте секцію для токену TELE_TOKEN
+secret:
+  name: "kbot"
+  env: "TELE_TOKEN"
+  key: "token"
+securityContext:
+  privileged: true
+```
   
-Додатково визначте секцію для токену TELE_TOKEN
-
 3. Відредагуйте файл "deployment.yaml" у каталозі "templates" та додайте блок з посиланням на образ контейнеру:
 
+```yaml
 spec:
   template:
     spec:
@@ -21,15 +33,28 @@ spec:
         - name: {{ .Release.Name }}
           image: {{ .Values.image.repository }}/{{ .Chart.Name }}:{{ .Values.image.tag }}-{{ .Values.image.arch | default "amd64"}}
   
-Додатково створіть блок для змінної середовища TELE_TOKEN із застосуванням Kubernetes secret
-
+# Додатково створіть блок для змінної середовища TELE_TOKEN із застосуванням Kubernetes secret
+          env:
+          - name: {{ .Values.secret.env }}
+            valueFrom:
+              secretKeyRef:
+                key: {{ .Values.secret.key }}
+                name: {{ .Values.secret.name }}
+```
 4. Запакуйте Helm чарт за допомогою команди:
 
-helm package <dir>
+```sh
+$ helm lint ./helm
+$ helm package ./helm
+```
   
 5. Створіть новий реліз GitHub за допомогою інтерактивної команди GitHub CLI (вам може знадобитися GITHUB_TOKEN):
 
-gh release create
+```sh
+$ gh auth login  
+$ gh release create
+
+```
   
 6. Перевірте створений реліз командою:
 

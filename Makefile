@@ -22,7 +22,8 @@ A = \007#         BEEP
 APP=$(shell basename $(shell git remote get-url origin))
 REGESTRY=umanetsvitaliy
 VERSION=$(shell git describe --tags --abbrev=0)-$(shell git rev-parse --short HEAD)
-	
+TARGETARCH=arm64 
+
 format:
 	gofmt -s -w ./
 
@@ -60,7 +61,7 @@ arm: format get
 	docker build --build-arg name=arm -t ${REGESTRY}/${APP}:${VERSION}-$(detected_OS)-arm .
 
 image:
-	docker build . -t ${REGESTRY}/${APP}:${VERSION}-$(detected_arch) --build-arg TARGETARCH=$(detected_arch)
+	docker build . -t ${REGESTRY}/${APP}:${VERSION}-$(detected_arch) --build-arg TARGETARCH=${TARGETARCH}
 
 push:
 	docker push ${REGESTRY}/${APP}:${VERSION}-$(detected_arch)

@@ -1,4 +1,89 @@
-## Coding Session. GitHub Actions
+# Task12 GitHub Actions 
+
+## Автоматизуйте повний цикл CICD для свого сервісу бота.
+
+1. Додамо новий проект на [Google Cloud](https://console.cloud.google.com/projectcreate) з назвою `vit-um` та переключаємось на нього:  
+
+2. Дозволяємо Google Container Registry API(https://console.cloud.google.com/marketplace/product/google/containerregistry.googleapis.com?project=kbot-407613)
+
+3. Змінюємо в `Makefile` назву репозиторію на 
+```Makefile
+REGESTRY := gcr.io/vit-um
+```
+3. Створимо імідж контейнеру нашого застосунку:
+```sh
+$ make image                
+docker build . -t gcr.io/vit-um/kbot:v.CICD-38f501f-amd64  --build-arg TARGETARCH=amd64 
+
+$ docker images
+REPOSITORY         TAG                   IMAGE ID       CREATED             SIZE
+gcr.io/vit-um/kbot v.CICD-38f501f-amd64  6643b9fb35f3   About an hour ago   11.3MB
+
+$ docker rmi -f 6643b9fb35f3
+Untagged: gcr.io/vit-um/kbot:v.CICD-38f501f-amd64
+Deleted: sha256:6643b9fb35f3ffdeaac5e287bc4ee556fc8cc2981513a0f840fc767686beb805
+
+$ git branch develop 
+$ g
+
+```
+4. При спробі запушити та виправити помилки, що отримаємо:
+```sh
+$ make push 
+docker push gcr.io/vit-um/kbot.git:v.CICD-38f501f-amd64 
+The push refers to repository [gcr.io/vit-um/kbot.git]
+ea325a7b7ffa: Preparing 
+36bdcea58c7c: Preparing 
+unauthorized: You don't have the needed permissions to perform this operation, and you may have invalid credentials. To authenticate your request, follow the steps in: https://cloud.google.com/container-registry/docs/advanced-authentication
+make: *** [Makefile:67: push] Error 1
+
+sudo usermod -a -G docker ${USER}
+curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-456.0.0-linux-x86_64.tar.gz
+
+tar -xf google-cloud-cli-456.0.0-linux-x86_64.tar.gz
+ ./google-cloud-sdk/install.sh
+
+gcloud version
+Google Cloud SDK 456.0.0
+bq 2.0.99
+bundled-python3-unix 3.11.6
+core 2023.12.01
+gcloud-crc32c 1.0.0
+gsutil 5.27
+
+gcloud init # та обираємо в інтерактивному меню щойно заведений проект `[3] vit-um`погоджуємось на авторизацію та проходимо її за наданим посиланням.
+
+$ gcloud config set project vit-um
+Updated property [core/project].
+
+$ gcloud auth configure-docker
+Adding credentials for all GCR repositories.
+WARNING: A long list of credential helpers may cause delays running 'docker build'. We recommend passing the registry name to configure only the registry you are using.
+After update, the following will be written to your Docker config file located at [/root/.docker/config.json]:
+ {
+  "credHelpers": {
+    "gcr.io": "gcloud",
+    "us.gcr.io": "gcloud",
+    "eu.gcr.io": "gcloud",
+    "asia.gcr.io": "gcloud",
+    "staging-k8s.gcr.io": "gcloud",
+    "marketplace.gcr.io": "gcloud"
+  }
+}
+
+Do you want to continue (Y/n)?  Y
+
+Docker configuration file updated.
+
+make push                   
+docker push gcr.io/vit-um/kbot.git:v.CICD-38f501f-amd64 
+The push refers to repository [gcr.io/vit-um/kbot.git]
+ea325a7b7ffa: Pushed 
+36bdcea58c7c: Pushed 
+
+
+3. Дозволяємо [Repositories - Settings](https://console.cloud.google.com/gcr/settings?project=kbot-407613) контейнеру стати публічним:
+
 
 Робочий процес GitHub Actions описується в каталозі `.github` в корні репозиторію, в якій розташуємо каталог `workflows`, де створимо `cicd.yaml` з кодом Pipeline. Зазвичай у кожного action є окремий репозиторій версії та [документація](https://github.com/actions/checkout#checkout-v4)
 

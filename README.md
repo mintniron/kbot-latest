@@ -23,6 +23,9 @@ $ docker rmi -f 6643b9fb35f3
 Untagged: gcr.io/vit-um/kbot:v.CICD-38f501f-amd64
 Deleted: sha256:6643b9fb35f3ffdeaac5e287bc4ee556fc8cc2981513a0f840fc767686beb805
 
+$ git tag v1.3.0
+
+
 $ git branch develop 
 $ g
 

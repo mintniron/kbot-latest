@@ -19,7 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          fetch-depth: 20
+          fetch-depth: 0
 # наступним кроком запустимо команду make test, зробимо коміт та подивимось як це працює
       - name: Run test
         run: make test
@@ -35,9 +35,8 @@ jobs:
       - run: sudo usermod -a -G docker ${USER}
 
       - run: | 
-          git fetch --all
           git fetch --tags
-          git describe --tags --abbrev=0
+          git describe --tags --abbrev=0 --always 
           git rev-parse --short HEAD
 
 # збираємо образ з використання змінної середовища 

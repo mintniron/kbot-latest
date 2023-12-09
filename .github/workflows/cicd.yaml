@@ -16,6 +16,10 @@ jobs:
       id-token: 'write'
 # перший крок задачі дозволить запускати на ранері репозиторій із скриптами для виконання дії. 
     steps:
+# наступним кроком запустимо команду make test, зробимо коміт та подивимось як це працює
+      - name: Run test
+        run: make test
+# авторизація на GCR
       - uses: 'actions/checkout@v4'
 
       - id: 'auth'
@@ -30,16 +34,9 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-# наступним кроком запустимо команду make test, зробимо коміт та подивимось як це працює
-      - name: Run test
-        run: make test
-# авторизація на GCR
-      # - name: Login to GCR
-      #   uses: 'google-github-actions/auth@v2'
-      #   with:
-      #     project_id: 'vit-um'
-      #     workload_identity_provider: 'projects/957309904619/locations/global/workloadIdentityPools/github/providers/my-repo'
 
+      - run: sudo usermod -a -G docker ${USER}
+      
 # збираємо образ з використання змінної середовища 
       - name: Build&Push
         env:

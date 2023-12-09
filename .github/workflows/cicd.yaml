@@ -34,12 +34,11 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v1'
       - run: sudo usermod -a -G docker ${USER}
 
-
 # збираємо образ з використання змінної середовища 
       - name: Build&Push
         env:
           APP: "kbot"
-          REGISTRY: ${{ vars.DOCKERHUB_USERNAME }}
+          REGISTRY: "gcr.io/vit-um"
         run: make image push
   cd:
     name: CD

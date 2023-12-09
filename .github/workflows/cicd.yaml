@@ -35,6 +35,8 @@ jobs:
       - run: sudo usermod -a -G docker ${USER}
 
       - run: | 
+          git checkout develop
+          git pull
           git describe --tags --abbrev=0
           git rev-parse --short HEAD
 

@@ -29,15 +29,22 @@ jobs:
       - name: Run test
         run: make test
 # авторизація на GCR
-      - uses: 'actions/checkout@v4'
-      - id: 'auth'
-        uses: 'google-github-actions/auth@v2'
+      # - uses: 'actions/checkout@v4'
+      # - id: 'auth'
+      #   uses: 'google-github-actions/auth@v2'
+      #   with:
+      #     project_id: 'vit-um'
+      #     workload_identity_provider: 'projects/957309904619/locations/global/workloadIdentityPools/github/providers/kbot'
+      # - name: 'Set up Cloud SDK'
+      #   uses: 'google-github-actions/setup-gcloud@v1'
+      # - run: sudo usermod -a -G docker ${USER}
+
+      - name: 'Login to GitHub Container Registry'
+        uses: docker/login-action@v3
         with:
-          project_id: 'vit-um'
-          workload_identity_provider: 'projects/957309904619/locations/global/workloadIdentityPools/github/providers/kbot'
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v1'
-      - run: sudo usermod -a -G docker ${USER}
+          registry: ghcr.io
+          username: "vit-um@vit-um.iam.gserviceaccount.com"
+          password: ${{ secrets.GCR_TOKEN }}
 
 # збираємо образ з використання змінної середовища 
       - name: Build&Push

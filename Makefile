@@ -21,7 +21,7 @@ A = \007#         BEEP
 
 APP=$(shell basename $(shell git remote get-url origin))
 REGESTRY := gcr.io/vit-um
-VERSION=$(shell git describe --tags --abbrev=0)-$(shell git rev-parse --short HEAD)
+VERSION=$(shell git describe --tags --abbrev=0 --always)-$(shell git rev-parse --short HEAD)
 TARGETARCH=amd64 
 
 format:

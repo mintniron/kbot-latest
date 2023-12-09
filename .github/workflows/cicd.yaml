@@ -8,22 +8,24 @@ on:
       - develop
 # блок задач який налаштовано на запуск завдання на новій ВМ з останньою версією ubuntu
 jobs:
-  gcr_auth:
+  gcr:
+    name: GCR_auth
     permissions:
       contents: 'read'
       id-token: 'write'
     steps:
-    - uses: 'actions/checkout@v4'
+      - uses: 'actions/checkout@v4'
 
-    - id: 'auth'
-      uses: 'google-github-actions/auth@v2'
-      with:
-        project_id: 'vit-um'
-        workload_identity_provider: 'projects/957309904619/locations/global/workloadIdentityPools/github/providers/kbot'
-    - name: 'Set up Cloud SDK'
-      uses: 'google-github-actions/setup-gcloud@v1'
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: 'vit-um'
+          workload_identity_provider: 'projects/957309904619/locations/global/workloadIdentityPools/github/providers/kbot'
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
   ci:
     name: CI
+    needs: gcr
     runs-on: ubuntu-latest
 # перший крок задачі дозволить запускати на ранері репозиторій із скриптами для виконання дії. 
     steps:

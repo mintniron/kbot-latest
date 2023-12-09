@@ -43,8 +43,8 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: "vit-um@vit-um.iam.gserviceaccount.com"
-          password: ${{ secrets.GCR_TOKEN }}
+          username: "vit-um"
+          password: ${{ secrets.GHCR_TOKEN }}
 
 # збираємо образ з використання змінної середовища 
       - name: Build&Push
@@ -64,7 +64,7 @@ jobs:
 
     - uses: mikefarah/yq@master
       with:
-        cmd: yq -i '.image.tag=strenv(VERSION)' helm/values.yaml
+        cmd: yq -i '.image.tag=strenv(VERSION)'  | .image.os=strenv(TARGETOS) | .image.arch=strenv(TARGETARCH)' helm/values.yaml
 
     - run: |
         git config user.name github-actions

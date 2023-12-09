@@ -1,8 +1,10 @@
 replicaCount: 1
 # v1.2.0-660ae95
 image:
-  repository: umanetsvitaliy
+  registry: "gcr.io"
+  repository: "gcr.io/vit-um/kbot"
   tag: v1.3.0-5cf21b0
+  os: linux
   arch: amd64
 # Додатково визначте секцію для токену TELE_TOKEN
 secret:

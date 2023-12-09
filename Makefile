@@ -20,7 +20,7 @@ D = \033[0m#      DEFAULT
 A = \007#         BEEP
 
 APP=$(shell basename $(shell git remote get-url origin))
-REGESTRY := gcr.io/vit-um
+REGESTRY := ghcr.io/vit-um
 VERSION=$(shell git describe --tags --abbrev=0 --always)-$(shell git rev-parse --short HEAD)
 TARGETARCH=amd64 
 TARGETOS=${detected_OS}

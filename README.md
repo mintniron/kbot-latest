@@ -95,7 +95,7 @@ on:
   push:
     branches:
       - develop
-      
+
 # блок задач який налаштовано на запуск завдання на новій ВМ з останньою версією ubuntu
 jobs:
   ci:
@@ -110,11 +110,51 @@ jobs:
         run: make test
 
 ```
-Зайдемо на [github.com](https://github.com/vit-um/kbot/actions) в розділ Actions де знайдемо наш файл `workflow` та журнал подій по кожному кроку.
+2. Зайдемо на [github.com](https://github.com/vit-um/kbot/actions) в розділ Actions де знайдемо наш файл `workflow` та журнал подій по кожному кроку.
 
-Для ускладнення виконання завдань нам потрібна буде авторизація на Docker hub за нашими контейнерами. Для цього скористуємось [документацією](https://github.com/docker/login-action#docker-hub) для опису параметрів.  
+3. Далі нам потрібна буде авторизація на Google Container Registry (GCR). Для цього скористуємось [документацією](https://github.com/docker/login-action#google-container-registry-gcr) для опису параметрів.  
+
+hs7G7C9rhU1XtdzbrtdI/Jcn/85mMQkxKYrOIOf5
+
+gcloud iam workload-identity-pools create "github" \
+  --project="vit-um" \       
+  --location="global" \
+  --display-name="GitHub Actions Pool"
+Created workload identity pool [github].
+
+PROJECT_ID=vit-um
+
+gcloud iam workload-identity-pools describe "github" \
+  --project="${PROJECT_ID}" \
+  --location="global" \
+  --format="value(name)"
+projects/957309904619/locations/global/workloadIdentityPools/github
+
+gcloud iam workload-identity-pools providers create-oidc "my-repo" \
+  --project="${PROJECT_ID}" \
+  --location="global" \
+  --workload-identity-pool="github" \
+  --display-name="My GitHub repo Provider" \
+  --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.repository=assertion.repository" \
+  --issuer-uri="https://token.actions.githubusercontent.com"
+Created workload identity pool provider [my-repo].
+
+gcloud iam workload-identity-pools providers describe "my-repo" \
+  --project="${PROJECT_ID}" \
+  --location="global" \
+  --workload-identity-pool="github" \
+  --format="value(name)"
+projects/957309904619/locations/global/workloadIdentityPools/github/providers/my-repo
+
+- uses: 'google-github-actions/auth@v2'
+  with:
+    project_id: 'my-project'
+    workload_identity_provider: 'projects/957309904619/locations/global/workloadIdentityPools/github/providers/my-repo'
+
+
 ```yaml
-      - name: Login to Docker Hub
+      - name: Authenticate to Google Cloud
+
         uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}

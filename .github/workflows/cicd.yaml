@@ -8,6 +8,20 @@ on:
       - develop
 # блок задач який налаштовано на запуск завдання на новій ВМ з останньою версією ubuntu
 jobs:
+  gcr_auth:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+    - uses: 'actions/checkout@v4'
+
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        project_id: 'vit-um'
+        workload_identity_provider: 'projects/957309904619/locations/global/workloadIdentityPools/github/providers/kbot'
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v1'
   ci:
     name: CI
     runs-on: ubuntu-latest
@@ -20,12 +34,12 @@ jobs:
 # наступним кроком запустимо команду make test, зробимо коміт та подивимось як це працює
       - name: Run test
         run: make test
-# авторизація на докерхабі
-      - name: Login to GCR
-        uses: 'google-github-actions/auth@v2'
-        with:
-          project_id: 'vit-um'
-          workload_identity_provider: 'projects/957309904619/locations/global/workloadIdentityPools/github/providers/my-repo'
+# авторизація на GCR
+      # - name: Login to GCR
+      #   uses: 'google-github-actions/auth@v2'
+      #   with:
+      #     project_id: 'vit-um'
+      #     workload_identity_provider: 'projects/957309904619/locations/global/workloadIdentityPools/github/providers/my-repo'
 
 # збираємо образ з використання змінної середовища 
       - name: Build&Push

@@ -114,7 +114,7 @@ jobs:
 
 3. Далі нам потрібна буде авторизація на Google Container Registry (GCR). Для цього скористуємось [документацією](https://github.com/docker/login-action#google-container-registry-gcr) для опису параметрів.  
 
-hs7G7C9rhU1XtdzbrtdI/Jcn/85mMQkxKYrOIOf5
+
 
 gcloud iam workload-identity-pools create "github" \
   --project="vit-um" \       
@@ -130,26 +130,26 @@ gcloud iam workload-identity-pools describe "github" \
   --format="value(name)"
 projects/957309904619/locations/global/workloadIdentityPools/github
 
-gcloud iam workload-identity-pools providers create-oidc "my-repo" \
+gcloud iam workload-identity-pools providers create-oidc "kbot" \
   --project="${PROJECT_ID}" \
   --location="global" \
   --workload-identity-pool="github" \
   --display-name="My GitHub repo Provider" \
   --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.repository=assertion.repository" \
   --issuer-uri="https://token.actions.githubusercontent.com"
-Created workload identity pool provider [my-repo].
+Created workload identity pool provider [kbot].
 
-gcloud iam workload-identity-pools providers describe "my-repo" \
+gcloud iam workload-identity-pools providers describe "kbot" \
   --project="${PROJECT_ID}" \
   --location="global" \
   --workload-identity-pool="github" \
   --format="value(name)"
-projects/957309904619/locations/global/workloadIdentityPools/github/providers/my-repo
+projects/957309904619/locations/global/workloadIdentityPools/github/providers/kbot
 
 - uses: 'google-github-actions/auth@v2'
   with:
-    project_id: 'my-project'
-    workload_identity_provider: 'projects/957309904619/locations/global/workloadIdentityPools/github/providers/my-repo'
+    project_id: 'vit-um'
+    workload_identity_provider: 'projects/957309904619/locations/global/workloadIdentityPools/github/providers/kbot'
 
 
 ```yaml

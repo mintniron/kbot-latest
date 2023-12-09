@@ -39,7 +39,7 @@ jobs:
         env:
           APP: "kbot"
 #          REGISTRY: "umanetsvitaliy@gmail.com"
-        run: make image push
+        run: make image # push
   cd:
     name: CD
     needs: ci

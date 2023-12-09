@@ -2,7 +2,7 @@ replicaCount: 1
 # v1.2.0-660ae95
 image:
   repository: umanetsvitaliy
-  tag: v1.2.0-b38593b
+  tag: v1.2.0-0d49caa
   arch: amd64
 # Додатково визначте секцію для токену TELE_TOKEN
 secret:

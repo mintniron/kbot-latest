@@ -114,8 +114,7 @@ jobs:
 
 3. Далі нам потрібна буде авторизація на Google Container Registry (GCR). Для цього скористуємось [документацією](https://github.com/docker/login-action#google-container-registry-gcr) для опису параметрів.  
 
-
-
+```sh
 gcloud iam workload-identity-pools create "github" \
   --project="vit-um" \       
   --location="global" \
@@ -150,15 +149,28 @@ projects/957309904619/locations/global/workloadIdentityPools/github/providers/kb
   with:
     project_id: 'vit-um'
     workload_identity_provider: 'projects/957309904619/locations/global/workloadIdentityPools/github/providers/kbot'
-
+```
+4. В результаті крок авторизації в GCR буде виглядати наступним чином: 
 
 ```yaml
-      - name: Authenticate to Google Cloud
-
-        uses: docker/login-action@v3
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+# авторизація на GCR
+      - uses: 'actions/checkout@v4'
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v2'
         with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          project_id: 'vit-um'
+          workload_identity_provider: 'projects/957309904619/locations/global/workloadIdentityPools/github/providers/kbot'
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+      - run: sudo usermod -a -G docker ${USER}
+
 ```
 З паролями працюємо через спеціальний механізм зберігання секретних даних гітхабу [Actions secrets and variables](https://github.com/vit-um/devops/settings/secrets/actions), де додамо дві змінних описаних вище:
 

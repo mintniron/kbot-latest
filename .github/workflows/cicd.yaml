@@ -38,7 +38,7 @@ jobs:
       - name: Build&Push
         env:
           APP: "kbot"
-          REGISTRY: "gcr.io/vit-um"
+          REGISTRY: "umanetsvitaliy@gmail.com"
         run: make image push
   cd:
     name: CD

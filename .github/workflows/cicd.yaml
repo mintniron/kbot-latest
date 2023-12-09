@@ -6,13 +6,18 @@ on:
   push:
     branches:
       - develop
+env:
+  TARGETOS: linux
+  TARGETARCH: amd64
+
 # блок задач який налаштовано на запуск завдання на новій ВМ з останньою версією ubuntu
 jobs:
   ci:
     name: CI
     runs-on: ubuntu-latest
+
     permissions:
-      contents: 'read'
+      contents: 'write'
       id-token: 'write'
 # перший крок задачі дозволить запускати на ранері репозиторій із скриптами для виконання дії. 
     steps:

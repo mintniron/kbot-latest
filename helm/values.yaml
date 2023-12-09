@@ -1,9 +1,9 @@
 replicaCount: 1
 # v1.2.0-660ae95
 image:
-  registry: "gcr.io"
-  repository: "gcr.io/vit-um/kbot"
-  tag: v1.3.0-c473823
+  registry: "ghcr.io"
+  repository: "ghcr.io/vit-um/kbot"
+  tag: v1.2.0-660ae95
   os: linux
   arch: amd64
 # Додатково визначте секцію для токену TELE_TOKEN

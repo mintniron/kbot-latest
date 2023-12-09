@@ -16,12 +16,15 @@ jobs:
       id-token: 'write'
 # перший крок задачі дозволить запускати на ранері репозиторій із скриптами для виконання дії. 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 # наступним кроком запустимо команду make test, зробимо коміт та подивимось як це працює
       - name: Run test
         run: make test
 # авторизація на GCR
       - uses: 'actions/checkout@v4'
-
       - id: 'auth'
         uses: 'google-github-actions/auth@v2'
         with:
@@ -29,14 +32,9 @@ jobs:
           workload_identity_provider: 'projects/957309904619/locations/global/workloadIdentityPools/github/providers/kbot'
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
-
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
       - run: sudo usermod -a -G docker ${USER}
-      
+
+
 # збираємо образ з використання змінної середовища 
       - name: Build&Push
         env:

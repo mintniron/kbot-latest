@@ -8,12 +8,12 @@
 
 3. Змінюємо в `Makefile` назву репозиторію на 
 ```Makefile
-REGESTRY := gcr.io/vit-um
+REGESTRY := ghcr.io/vit-um
 ```
 4. Створимо імідж контейнеру нашого застосунку:
 ```sh
 $ make image                
-docker build . -t gcr.io/vit-um/kbot:v.CICD-38f501f-amd64  --build-arg TARGETARCH=amd64 
+docker build . -t ghcr.io/vit-um/kbot:v.CICD-38f501f-amd64  --build-arg TARGETARCH=amd64 
 
 $ docker images
 REPOSITORY         TAG                   IMAGE ID       CREATED             SIZE
@@ -33,54 +33,23 @@ Branch 'develop' set up to track remote branch 'develop' from 'origin'.
 Everything up-to-date
 ```
 
+
+
 5. При спробі запушити отримали помили, що потрібно виправити: 
 ```sh
 $ make push 
+$ export CR_PAT=ghp_*****************
+$ echo $CR_PAT | docker login ghcr.io -u vit-um --password-stdin
+Login Succeeded
 
-# переходимо за наданим посиланням та виконуємо всі рекомендації 
-$ sudo usermod -a -G docker ${USER}
-
-# встановимо gcloud 
-$ curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-456.0.0-linux-x86_64.tar.gz
-$ tar -xf google-cloud-cli-456.0.0-linux-x86_64.tar.gz
-$ ./google-cloud-sdk/install.sh
-
-$ gcloud version
-Google Cloud SDK 456.0.0
-bq 2.0.99
-bundled-python3-unix 3.11.6
-core 2023.12.01
-gcloud-crc32c 1.0.0
-gsutil 5.27
-
-# ініціалізуємо gcloud та обираємо в інтерактивному меню щойно заведений проект `[3] vit-um`погоджуємось на авторизацію та проходимо її за наданим посиланням.
-$ gcloud init 
-
-# обираємо проект
-$ gcloud config set project vit-um
-Updated property [core/project].
-
-# виконуємо авторизацію
-$ gcloud auth configure-docker
-Adding credentials for all GCR repositories.
-WARNING: A long list of credential helpers may cause delays running 'docker build'. We recommend passing the registry name to configure only the registry you are using.
-
-# Отримаємо бажаний результат:
-make push
-docker push gcr.io/vit-um/kbot:v1.3.0-5f20808-amd64 
-The push refers to repository [gcr.io/vit-um/kbot]
-7f00a4412624: Pushed 
-0acfdd35c93c: Pushed 
-v1.3.0-5f20808-amd64: digest: sha256:c36e732dc06d624b53a8efa8e87dc80874f89ccc711176084d88fde92212726a size: 737
+$ make push
+docker push ghcr.io/vit-um/kbot:v1.3.0-82e00eb-linux-amd64 
+The push refers to repository [ghcr.io/vit-um/kbot]
+f369bcfadf87: Pushed 
+039f725d5b7c: Pushed 
+v1.3.0-82e00eb-linux-amd64: digest: sha256:b4b3e8fc464abb8cfa3db07d3b2dbb01117ecdb525709d7a6f6443c7d4e73c22 size: 737
 ```
 
-6. Дозволяємо [Repositories](https://console.cloud.google.com/gcr/images/vit-um) стати публічним:
-```sh
-$ gsutil ls
-gs://artifacts.vit-um.appspot.com/
-
-$ gsutil iam ch allUsers:objectViewer gs://artifacts.vit-um.appspot.com/
-```
 
 ## Автоматизуйте цикл CI для свого сервісу бота.
 

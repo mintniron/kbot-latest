@@ -28,22 +28,13 @@ jobs:
 # наступним кроком запустимо команду make test, зробимо коміт та подивимось як це працює
       - name: Run test
         run: make test
-# авторизація на GCR
-      # - uses: 'actions/checkout@v4'
-      # - id: 'auth'
-      #   uses: 'google-github-actions/auth@v2'
-      #   with:
-      #     project_id: 'vit-um'
-      #     workload_identity_provider: 'projects/957309904619/locations/global/workloadIdentityPools/github/providers/kbot'
-      # - name: 'Set up Cloud SDK'
-      #   uses: 'google-github-actions/setup-gcloud@v1'
-      # - run: sudo usermod -a -G docker ${USER}
+# авторизація на GHCR
 
       - name: 'Login to GitHub Container Registry'
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: "vit-um"
+          username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
 
 # збираємо образ з використання змінної середовища 

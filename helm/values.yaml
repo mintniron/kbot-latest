@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   registry: "ghcr.io"
   repository: "ghcr.io/vit-um/kbot"
-  tag: v1.3.0-f602b09
+  tag: v1.3.0-373cd75
   os: linux
   arch: amd64
 # Додатково визначте секцію для токену TELE_TOKEN

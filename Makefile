@@ -20,9 +20,10 @@ D = \033[0m#      DEFAULT
 A = \007#         BEEP
 
 APP=$(shell basename $(shell git remote get-url origin))
-REGESTRY := gcr.io/vit-um
-VERSION=$(shell git describe --tags --abbrev=0)-$(shell git rev-parse --short HEAD)
+REGESTRY := ghcr.io/vit-um
+VERSION=$(shell git describe --tags --abbrev=0 --always)-$(shell git rev-parse --short HEAD)
 TARGETARCH=amd64 
+TARGETOS=${detected_OS}
 
 format:
 	gofmt -s -w ./
@@ -61,10 +62,10 @@ arm: format get
 	docker build --build-arg name=arm -t ${REGESTRY}/${APP}:${VERSION}-$(detected_OS)-arm .
 
 image:
-	docker build . -t ${REGESTRY}/${APP}:${VERSION}-${TARGETARCH} --build-arg TARGETARCH=${TARGETARCH}
+	docker build . -t ${REGESTRY}/${APP}:${VERSION}-${detected_OS}-${TARGETARCH} --build-arg TARGETOS=${detected_OS} --build-arg TARGETARCH=${TARGETARCH}
 
 push:
-	docker push ${REGESTRY}/${APP}:${VERSION}-${TARGETARCH}
+	docker push ${REGESTRY}/${APP}:${VERSION}-${TARGETOS}-${TARGETARCH}
 
 dive: image
 	IMG1=$$(docker images -q | head -n 1); \

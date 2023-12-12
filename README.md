@@ -70,3 +70,29 @@ $ cat ~/.ssh/id_rsa
 - Вкажемо шлях до скрипту, який ми підготували у полі Script Path `/pipeline/jenkins.groovy`
 - Збережіть налаштування проекту. 
 
+5. Налаштуємо доступ до локального комп'ютера за допомогою sshd щоб Jenkins міг використовувати його в якості агенту.
+- встановимо sshd сервер.
+```sh
+$ sudo apt-get install openssh-server
+$ sudo nano /etc/ssh/sshd_config
+
+# PubkeyAuthentication yes
+
+
+$ sudo service ssh restart
+$ ssh localhost -p 2222
+
+$ cat ~/.ssh/id_rsa.pub
+
+$ cat >>~/.ssh/authorized_keys  
+
+$ ssh localhost -p 2222
+Welcome to Ubuntu 22.04.1 LTS (GNU/Linux 5.15.90.1-microsoft-standard-WSL2 x86_64)
+```
+- Якщо це не передбачено початковою конфігурацією Jenkins встановимо плагін `SSH Build Agents`
+- Додамо параметри доступу до Jenkins:   
+      - `Launch method` > SSH Build Agents  
+      - `Credentials` > vit-um
+      - `Host Key Verification Strategy` > Non verifying... 
+      - `Port` > 2222
+

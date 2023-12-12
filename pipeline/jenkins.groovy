@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         GITHUB_TOKEN=credentials('vit-um')
-        REPO = 'https://github.com/vit-um/kbot'
+        REPO = 'https://github.com/vit-um/kbot.git'
         BRANCH = 'main'
     }
 
@@ -52,11 +52,5 @@ pipeline {
                 sh "make -n ${params.OS} ${params.ARCH} image push"
             }
         } 
-    }
-
-    post {
-        always {
-            sh 'docker logout'
-        }
     }
 }

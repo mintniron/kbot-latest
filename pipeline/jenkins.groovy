@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        GITHUB_TOKEN=credentials('github')
+        GITHUB_TOKEN=credentials('vit-um')
         REPO = 'https://github.com/vit-um/kbot'
         BRANCH = 'main'
     }

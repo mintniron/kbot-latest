@@ -75,10 +75,6 @@ $ cat ~/.ssh/id_rsa
 ```sh
 $ sudo apt-get install openssh-server
 $ sudo nano /etc/ssh/sshd_config
-
-# PubkeyAuthentication yes
-
-
 $ sudo service ssh restart
 $ ssh localhost -p 2222
 
@@ -95,4 +91,3 @@ Welcome to Ubuntu 22.04.1 LTS (GNU/Linux 5.15.90.1-microsoft-standard-WSL2 x86_6
       - `Credentials` > vit-um
       - `Host Key Verification Strategy` > Non verifying... 
       - `Port` > 2222
-

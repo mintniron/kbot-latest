@@ -1,13 +1,10 @@
 replicaCount: 1
 # v1.2.0-660ae95
 image:
-  registry: "ghcr.io"
-  repository: "vit-um/kbot"
-  pullPolicy: IfNotPresent # Дозволяє замінити образ за замовчуванням
+  repository: "umanetsvitaliy"
   tag: v1.3.0-c9bf7ee
   os: linux
   arch: amd64
-  parameter: go
 # Додатково визначте секцію для токену TELE_TOKEN
 secret:
   name: "kbot"

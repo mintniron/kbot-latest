@@ -1,7 +1,7 @@
 replicaCount: 1
 # v1.2.0-660ae95
 image:
-  repository: "umanetsvitaliy"
+  repository: umanetsvitaliy
   tag: v1.3.0-c9bf7ee
   os: linux
   arch: amd64

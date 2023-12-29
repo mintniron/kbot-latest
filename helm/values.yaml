@@ -1,7 +1,7 @@
 replicaCount: 1
 image:
   repository: umanetsvitaliy
-  tag: v1.4.1-c5c88e1
+  tag: v1.4.1-7acc95d
 
 # Додатково визначте секцію для токену TELE_TOKEN
 secret:

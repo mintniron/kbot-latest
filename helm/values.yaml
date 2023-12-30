@@ -1,14 +1,14 @@
 replicaCount: 1
 image:
   repository: "umanetsvitaliy"
-  tag: "v1.4.3-d780984"
+  tag: "v1.4.3-b346423"
   arch: "amd64"
   os: "linux"
 
 # Додатково визначте секцію для токену TELE_TOKEN
 secret:
-  name: "TELE_TOKEN"
-  tokenKey: "token"
-  tokenName: "kbot"
+  name: "kbot"
+  env: "TELE_TOKEN"
+  key: "token"
 securityContext:
   privileged: true

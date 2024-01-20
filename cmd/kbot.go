@@ -6,12 +6,11 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 	"time"
 
+	"github.com/hirosassa/zerodriver"
 	"github.com/spf13/cobra"
-	"github.com/vit-um/kbot/go/pkg/mod/github.com/hirosassa/zerodriver@v0.1.4"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc"
 	sdkmetric "go.opentelemetry.io/otel/sdk/metric"
@@ -29,13 +28,19 @@ var (
 
 // Initialize OpenTelemetry
 func initMetrics(ctx context.Context) {
-
 	// Create a new OTLP Metric gRPC exporter with the specified endpoint and options
-	exporter, _ := otlpmetricgrpc.New(
+	exporter, err := otlpmetricgrpc.New(
 		ctx,
 		otlpmetricgrpc.WithEndpoint(MetricsHost),
 		otlpmetricgrpc.WithInsecure(),
 	)
+
+	if err != nil {
+		// Обробка помилки, наприклад, виведення повідомлення або логування
+		fmt.Println("Помилка при створенні експортера:", err)
+
+		return
+	}
 
 	// Define the resource with attributes that are common to all metrics.
 	// labels/tags/resources that are common to all metrics.
@@ -91,7 +96,7 @@ to quickly create a Cobra application.`,
 		})
 
 		if err != nil {
-			log.Fatalf("Please check TELE_TOKEN env variable. %s", err)
+			//log.Fatalf("Please check TELE_TOKEN env variable. %s", err)
 			logger.Fatal().Str("Error", err.Error()).Msg("Please check TELE_TOKEN")
 			return
 		} else {
@@ -111,12 +116,12 @@ to quickly create a Cobra application.`,
 
 		kbot.Handle(telebot.OnText, func(m telebot.Context) error {
 
-			logger.Info().Str("Payload", m.Text()).Msg(m.Text().Payload)
+			logger.Info().Str("Payload", m.Text()).Msg(m.Message().Payload)
 
-			payload := m.Text().Payload
+			payload := m.Message().Payload
 			pmetrics(context.Background(), payload)
 
-			switch payload {
+			switch m.Text() {
 			case "Hello":
 				err = m.Send(fmt.Sprintf("Hi! I'm Kbot %s! And I know what time it is!", appVersion))
 				return err

@@ -23,7 +23,7 @@ APP=$(shell basename $(shell git remote get-url origin) | cut -d"." -f1)
 ## $(shell basename $(shell git remote get-url origin))
 REGESTRY := umanetsvitaliy
 VERSION=$(shell git describe --tags --abbrev=0 --always)-$(shell git rev-parse --short HEAD)
-TARGETARCH=amd64 
+TARGETARCH := amd64 
 TARGETOS=${detected_OS}
 
 format:

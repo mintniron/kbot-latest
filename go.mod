@@ -1,8 +1,7 @@
 module github.com/vit-um/kbot
 
-go 1.21
+go 1.20
 
-toolchain go1.21.4
 
 require (
 	github.com/hirosassa/zerodriver v0.1.4
@@ -11,7 +10,7 @@ require (
 	go.opentelemetry.io/otel/exporters/otlp/otlpmetric/otlpmetricgrpc v0.45.0
 	go.opentelemetry.io/otel/sdk v1.22.0
 	go.opentelemetry.io/otel/sdk/metric v1.22.0
-	gopkg.in/telebot.v3 v3.1.4
+	gopkg.in/telebot.v3 v3.2.1
 )
 
 require (

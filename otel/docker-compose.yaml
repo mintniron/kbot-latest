@@ -35,6 +35,7 @@ services:
     volumes:
       - ./fluent-bit/docker-metadata.lua:/fluent-bit/bin/docker-metadata.lua
       - ./fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./fluent-bit/parsers.conf:/fluent-bit/etc/parsers.conf     
       - /var:/var
       - /proc:/host/proc
       - /sys:/host/sys

@@ -27,7 +27,7 @@ services:
     volumes:
       - ./prometheus/prometheus.yaml:/etc/prometheus.yaml
     ports:
-      - "9091:9091"
+      - "9090:9090"
   
   # FluentBit
   fluentbit:

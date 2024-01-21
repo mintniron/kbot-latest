@@ -3,7 +3,7 @@ services:
 
   # Kbot
   kbot:
-    image: umanetsvitaliy/kbot:v1.5.0-c0c67b7-linux-amd64
+    image: umanetsvitaliy/kbot:v1.5.0-8d0aaa8-linux-amd64
     environment:
       - METRICS_HOST=collector:4317
       - TELE_TOKEN=${TELE_TOKEN}
@@ -27,7 +27,7 @@ services:
     volumes:
       - ./prometheus/prometheus.yaml:/etc/prometheus.yaml
     ports:
-      - "9090:9090"
+      - "9091:9091"
   
   # FluentBit
   fluentbit:

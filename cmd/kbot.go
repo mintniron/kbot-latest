@@ -6,6 +6,7 @@ package cmd
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -28,6 +29,12 @@ var (
 
 // Initialize OpenTelemetry
 func initMetrics(ctx context.Context) {
+
+	// переконатися, що змінна середовища METRICS_HOST встановлена
+	if MetricsHost == "" {
+		log.Fatal("METRICS_HOST не встановлено")
+	}
+
 	// Create a new OTLP Metric gRPC exporter with the specified endpoint and options
 	exporter, err := otlpmetricgrpc.New(
 		ctx,
@@ -37,9 +44,9 @@ func initMetrics(ctx context.Context) {
 
 	if err != nil {
 		// Обробка помилки, наприклад, виведення повідомлення або логування
-		fmt.Println("Помилка при створенні експортера:", err)
-
-		return
+		fmt.Printf("Failed to create exporter: %v\n", err)
+		panic(err)
+		// return
 	}
 
 	// Define the resource with attributes that are common to all metrics.
@@ -67,8 +74,11 @@ func pmetrics(ctx context.Context, payload string) {
 	meter := otel.GetMeterProvider().Meter("kbot_commands_counter")
 
 	// Get or create an Int64Counter instrument with the name "kbot_command_<payload>"
-	counter, _ := meter.Int64Counter(fmt.Sprintf("kbot_command_%s", payload))
-
+	counter, err := meter.Int64Counter(fmt.Sprintf("kbot_command_%s", payload))
+	if err != nil {
+		fmt.Printf("Error creating counter: %v\n", err)
+		return
+	}
 	// Add a value of 1 to the Int64Counter
 	counter.Add(ctx, 1)
 }
@@ -104,6 +114,9 @@ to quickly create a Cobra application.`,
 		}
 
 		kbot.Handle("/start", func(m telebot.Context) error {
+
+			logger.Info().Str("Payload", m.Text()).Msg(m.Message().Payload)
+
 			menu := &telebot.ReplyMarkup{
 				ReplyKeyboard: [][]telebot.ReplyButton{
 					{{Text: "Hello"}, {Text: "Help"}},
@@ -118,10 +131,12 @@ to quickly create a Cobra application.`,
 
 			logger.Info().Str("Payload", m.Text()).Msg(m.Message().Payload)
 
-			payload := m.Message().Payload
+			payload := m.Text()
 			pmetrics(context.Background(), payload)
 
-			switch m.Text() {
+			// payload = m.Text()
+
+			switch payload {
 			case "Hello":
 				err = m.Send(fmt.Sprintf("Hi! I'm Kbot %s! And I know what time it is!", appVersion))
 				return err
@@ -185,6 +200,7 @@ func getTime(location string) string {
 func init() {
 	ctx := context.Background()
 	initMetrics(ctx)
+
 	rootCmd.AddCommand(kbotCmd)
 
 	// Here you will define your flags and configuration settings.

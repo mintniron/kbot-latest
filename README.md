@@ -1,7 +1,7 @@
 # Стек моніторингу Grafana для демо-застосунку розгорнуто за допомогою docker-compose
 
 ## Середовище розгортання
-- VDS з [Ubuntu 22.04.3](https://ubuntu.com/) LTS (GNU/Linux 5.15.0-91-generic x86_64) та доменним ім'ям http://smart-home.dp.ua/
+- VDS з [Ubuntu 22.04.3](https://ubuntu.com/) LTS (GNU/Linux 5.15.0-91-generic x86_64) та доменним ім'ям [http://smart-home.dp.ua/](http://smart-home.dp.ua:3002/d/KhuTkQcSk/world-time-bot?orgId=1)  
 - [Телеграм бот](https://t.me/umanetsvitalii_bot) 🌍 time_bot
 - [Docker Compose](https://docs.docker.com/compose/)
 

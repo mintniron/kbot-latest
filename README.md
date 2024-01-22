@@ -28,8 +28,20 @@ env
 git pull
 docker-compose -f otel/docker-compose.yaml up
 ```
+4. Впевнимось, що все піднялось:
+```sh 
+ubuntu-serv# docker ps -a
 
-4. Інтерфейс системи моніторингу
+CONTAINER ID   IMAGE                                            COMMAND                  CREATED        STATUS        PORTS                                                        NAMES
+e898dd49a3b0   umanetsvitaliy/kbot:v1.5.0-8d0aaa8-linux-amd64   "./kbot go"              30 hours ago   Up 30 hours                                                                otel-kbot-1
+ec7ae74269ee   grafana/loki:2.8.2                               "/usr/bin/loki -conf…"   30 hours ago   Up 30 hours   0.0.0.0:3100->3100/tcp, :::3100->3100/tcp                    otel-loki-1
+5008a49941d6   grafana/grafana:9.4.3                            "/run.sh"                30 hours ago   Up 30 hours   3000/tcp, 0.0.0.0:3002->3002/tcp, :::3002->3002/tcp          otel-grafana-1
+0580e35886fd   prom/prometheus:latest                           "/bin/prometheus --c…"   30 hours ago   Up 30 hours   0.0.0.0:9090->9090/tcp, :::9090->9090/tcp                    otel-prometheus-1
+f53db7f2aa4a   otel/opentelemetry-collector-contrib:0.78.0      "/otelcol-contrib --…"   30 hours ago   Up 30 hours   0.0.0.0:4317->4317/tcp, :::4317->4317/tcp, 55678-55679/tcp   otel-collector-1
+db4a6fb3bc49   fluent/fluent-bit:latest                         "/fluent-bit/bin/flu…"   30 hours ago   Up 30 hours   2020/tcp, 0.0.0.0:3001->3001/tcp, :::3001->3001/tcp          otel-fluentbit-1
+```
+
+5. Інтерфейс системи моніторингу
 
 ![Grafana Dashboard](.img/GrafanaDashboard.png) 
 

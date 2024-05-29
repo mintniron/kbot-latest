@@ -6,4 +6,4 @@ git config hooks.gitleaks.enable false
 
 # 8.1
 
-![gitleaks_img](.kbot-latest/img/Screen Shot 2024-05-30 at 00.32.27.png)
+![gitleaks_img](https://github.com/mintniron/kbot-latest/blob/Task18/img/Screen%20Shot%202024-05-30%20at%2000.32.27.png?raw=true)
